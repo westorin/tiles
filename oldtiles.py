@@ -1,4 +1,4 @@
-#Directions
+#Directions Orn
 NORTH = "n"
 EAST = "e"
 SOUTH = "s"
