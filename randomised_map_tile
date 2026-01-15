@@ -1,5 +1,32 @@
 import random
 
+def render_map(width, height, player_x, player_y, discovered, victory_tile, levers, show_all=False):
+    print(" _" * 40)
+
+    for y in range(height, 0, -1):
+        row = []
+        for x in range(1, width + 1):
+            pos = (x, y)
+
+            if (x,y) == (player_x, player_y):
+                row.append("P")
+
+            elif (pos in discovered) or show_all:
+                if pos == victory_tile:
+                    row.append("V")
+                elif pos in levers and levers[pos] > 0:
+                    row.append("L")
+                else:
+                    row.append(".")
+            else:
+                row.append("?")
+
+        print("".join(row))
+    print("\nP=Player, V=Victory Tile, L=Lever, .=Discovered, ?=Undiscovered")
+    print(" _" * 40)
+    print()
+
+
 
 def get_valid_directions(x, y, width, height):
     directions = []
@@ -70,6 +97,7 @@ def main():
 
     x, y = 1, 1
     gold = 0
+    discovered = {(1,1)}
 
     victory_tile = (random.randint(1, width), random.randint(1, height))
     while victory_tile == (1, 1):
@@ -86,6 +114,9 @@ def main():
     print("Find the victory tile!\n")
 
     while True:
+        discovered.add((x, y))
+        render_map(width, height, x, y, discovered, victory_tile, levers)
+
         print(f"Gold: {gold}")
         print(f"You are on tile ({x}, {y}).")
 
@@ -98,7 +129,8 @@ def main():
         valid_directions = get_valid_directions(x, y, width, height)
         print(direction_string(valid_directions))
 
-        direction = input("Direction: ").lower()
+        direction = input("Direction: ").lower().strip()
+        direction = direction[:1]
         if direction in valid_directions:
             x, y = move(x, y, direction)
         else:
