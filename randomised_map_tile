@@ -90,6 +90,30 @@ def handle_lever(x, y, levers, gold):
             print("The lever here is depleted.")
     return gold
 
+def init_cat(width, height, count=1, forbidden=None):
+    if forbidden is None:
+        forbidden = []
+
+    cats = {}
+    while len(cats) < count:
+        x = random.randint(1, width)
+        y = random.randint(1, height)
+        if (x, y) not in forbidden:
+            cats[(x, y)] = random.randint(1, 3)
+    return cats
+
+
+def handle_cat(x, y, cats):
+    if (x, y) in cats:
+        if cats[(x, y)] > 0:
+            choice = input("You see a cat would you like to (p)et it or (k)ill it: ").lower()
+            if choice == 'p':
+                print("The cat likes you, for you are a good person")
+            elif choice == "k":
+                print("You monster how could you kill the cat")
+    return 
+
+
 
 def main():
     width = random.randint(3, 9)
@@ -110,6 +134,13 @@ def main():
         forbidden=[(1, 1), victory_tile]
     )
 
+    cats = init_cat(
+        width,
+        height,
+        count=1,
+        forbidden=[(1, 1), victory_tile]
+    )
+
     print(f"Map size: {width} x {height}")
     print("Find the victory tile!\n")
 
@@ -126,6 +157,8 @@ def main():
 
         gold = handle_lever(x, y, levers, gold)
 
+        cats = handle_cat(x,y,cats)
+
         valid_directions = get_valid_directions(x, y, width, height)
         print(direction_string(valid_directions))
 
@@ -133,6 +166,11 @@ def main():
         direction = direction[:1]
         if direction in valid_directions:
             x, y = move(x, y, direction)
+        else:
+            print("Not a valid direction!")
+
+
+main()
         else:
             print("Not a valid direction!")
 
