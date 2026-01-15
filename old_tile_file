@@ -1,0 +1,48 @@
+def get_valid_directions(x, y):
+    directions = {
+        (1, 1): ['n'],
+        (1, 2): ['n', 'e', 's'],
+        (1, 3): ['e', 's'],
+        (2, 1): ['n'],
+        (2, 2): ['s', 'w'],
+        (2, 3): ['e', 'w'],
+        (3, 1): [], 
+        (3, 2): ['n', 's'],
+        (3, 3): ['s', 'w'],
+    }
+    return directions.get((x, y), [])
+
+def direction_string(directions):
+    dir_map = { 'n': '(N)orth', 'e': '(E)ast', 's': '(S)outh', 'w': '(W)est' }
+    output = ' or '.join([dir_map[d] for d in directions])
+    return f'You can travel: {output}.'
+
+def move(x, y, direction):
+    if direction == "n" or direction == "N":
+        return x, y + 1
+    elif direction == "s" or direction == "S":
+        return x, y - 1
+    elif direction == "e" or direction == "E":
+        return x + 1, y
+    elif direction == "w" or direction == "W":
+        return x - 1, y
+    return x, y  
+
+def main():
+    x, y = 1, 1  
+
+    while True:
+        valid_directions = get_valid_directions(x, y)
+        if (x, y) == (3, 1):
+            print("Victory!")
+            break
+
+        print(direction_string(valid_directions))
+        direction = input("Direction: ").lower()
+
+        if direction in valid_directions:
+            x, y = move(x, y, direction)
+        else:
+            print("Not a valid direction!")
+
+main()
