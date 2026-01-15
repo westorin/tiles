@@ -1,6 +1,6 @@
 import random
 
-def render_map(width, height, player_x, player_y, discovered, victory_tile, levers, show_all=False):
+def render_map(width, height, player_x, player_y, discovered, victory_tile, levers, cats, show_all=True):
     print(" _" * 40)
 
     for y in range(height, 0, -1):
@@ -16,13 +16,15 @@ def render_map(width, height, player_x, player_y, discovered, victory_tile, leve
                     row.append("V")
                 elif pos in levers and levers[pos] > 0:
                     row.append("L")
+                elif pos in cats and cats[pos] > 0:
+                    row.append("C")
                 else:
                     row.append(".")
             else:
                 row.append("?")
 
         print("".join(row))
-    print("\nP=Player, V=Victory Tile, L=Lever, .=Discovered, ?=Undiscovered")
+    print("\nP=Player, V=Victory Tile, L=Lever, C=Cat, .=Discovered, ?=Undiscovered")
     print(" _" * 40)
     print()
 
@@ -111,7 +113,9 @@ def handle_cat(x, y, cats):
                 print("The cat likes you, for you are a good person")
             elif choice == "k":
                 print("You monster how could you kill the cat")
-    return 
+            else:
+                print("The cat is confused by your actions and walks away")
+    return cats
 
 
 
@@ -146,7 +150,7 @@ def main():
 
     while True:
         discovered.add((x, y))
-        render_map(width, height, x, y, discovered, victory_tile, levers)
+        render_map(width, height, x, y, discovered, victory_tile, levers, cats)
 
         print(f"Gold: {gold}")
         print(f"You are on tile ({x}, {y}).")
@@ -171,8 +175,4 @@ def main():
 
 
 main()
-        else:
-            print("Not a valid direction!")
 
-
-main()
